@@ -1,0 +1,9 @@
+# First, install the needed python environnment
+virtenv env
+
+# Run the virtual environment
+source env/bin/activate
+
+# Install needed python packages
+pip install pipfile
+
