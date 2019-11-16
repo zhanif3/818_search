@@ -17,7 +17,6 @@ POSTGRES_DB = "project"
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
@@ -51,18 +50,22 @@ def upload():
     </form>
     '''
 
+
 @app.route('/compare/<path:experiment_one>/<path:experiment_two>')
 def compare():
     return 'This is the compare function for two experiments.'
+
 
 @app.route('/experiment')
 def experiment():
     return 'This is the view of an experiment'
 
+
 @app.route('/hello')
 def hello():
     return 'Hello!'
- 
+
+
 if __name__ == '__main__':
 
     app.run(debug=True, host='0.0.0.0')
