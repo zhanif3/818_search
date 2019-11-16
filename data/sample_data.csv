@@ -1,0 +1,12 @@
+query_number, metric_type (NDCG; MAP; etc), score (float)
+1, NDCG, 0.078
+2, MAP, 1
+3, MAP, 2
+4, MAP, 3
+5, MAP, 4
+6, MAP, 5
+7, MAP, 6
+8, MAP, 7
+9, MAP, 8
+10, MAP, 9
+11, MAP, 10.0
