@@ -1,4 +1,4 @@
-query_number, metric_type (NDCG; MAP; etc), score (float)
+query_number,metric_type,score
 1, NDCG, 0.078
 2, MAP, 1
 3, MAP, 2
