@@ -14,8 +14,10 @@ POSTGRES_PW = "818"
 POSTGRES_URL = "127.0.0.1:5432"
 POSTGRES_DB = "project"
 
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -37,8 +39,7 @@ def upload():
             df = pd.read_csv(io.StringIO(data), delimiter=',', header='infer')
 
             print(df)
-
-
+            
             return redirect(url_for('upload', filename=filename))
     return '''
     <!doctype html>
