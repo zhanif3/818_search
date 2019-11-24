@@ -17,8 +17,10 @@ ALLOWED_EXTENSIONS = {'txt', 'csv'}
 
 r = redis.Redis(host='localhost', port=6379, db=0)
 
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -58,18 +60,22 @@ def upload():
     </form>
     '''
 
+
 def one_way_anova():
     t, p =  f_oneway(*data.values())
     return p
+
 
 def t_test():
     for list1, list2 in combinations(data.keys(), 2):
         t, p = ttest_ind(data[list1], data[list2])
         print(list1, list2, p)
 
+
 def histogram_intersection(a, b):
     v = np.minimum(a, b).sum().round(decimals=1)
     return v
+
 
 @app.route('/compare/<experiment_one>/<experiment_two>')
 def compare(experiment_one, experiment_two):
@@ -113,6 +119,7 @@ def compare(experiment_one, experiment_two):
     aggregator["data_cov"] = data_cov.to_dict()
     return ujson.dumps(aggregator)
 
+
 @app.route('/experiment/<experiment_id>')
 def experiment(experiment_id):
     return r.get(experiment_id+'_statistics').decode('utf-8')
@@ -122,9 +129,11 @@ def experiment(experiment_id):
 def hello():
     return 'Hello!'
 
+
 def experiment_list():
     experiments = [element.decode("utf-8") for element in r.smembers("experiments")]
     return experiments
+
 
 @app.route('/experiments')
 def experiments():
@@ -133,6 +142,7 @@ def experiments():
         experiment_holder["experiments"].append(str(element.decode("utf-8")))
     return_json = ujson.dumps(experiment_holder)
     return return_json
+
 
 if __name__ == '__main__':
 
