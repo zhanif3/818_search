@@ -1,4 +1,5 @@
 from flask import Flask, flash, request, redirect, url_for
+from flask import render_template, jsonify
 from werkzeug.utils import secure_filename
 import os
 import pandas as pd
@@ -51,9 +52,8 @@ def upload():
             return redirect(url_for('upload', filename=filename))
 
     return '''
-    <!doctype html>
-    <title>Upload new File</title>
     <h1>Upload new File</h1>
+    <p>Upload new File</p>
     <form method=post enctype=multipart/form-data>
       <input type=file name=file>
       <input type=submit value=Upload>
@@ -127,7 +127,7 @@ def experiment(experiment_id):
 
 @app.route('/')
 def hello():
-    return 'Hello!'
+    return render_template('viz.html')
 
 
 def experiment_list():

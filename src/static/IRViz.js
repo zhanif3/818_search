@@ -1,7 +1,13 @@
-<script>
+var uploadDiv = document.getElementById('upload');
+$.get("/upload", function(data) {
+console.log(data);
+uploadDiv.innerHTML=data;
+})
+
 var graphDiv = document.getElementById('tester'),
 data = [{x: [], y:[]}],
 layout = {};
+
 
 Plotly.newPlot(graphDiv, data, layout);
 
@@ -41,6 +47,7 @@ $(document).ready(function() {
 $("select").on('change', function(event){
 var yearvalue = document.getElementById("year-value").value;
 var dataToBeSent = document.getElementById("mySelect").value;
+
 $.ajax({
 type: "POST",
 url: "send_data",
@@ -58,4 +65,3 @@ console.log(error);
 });
 });
 });
-</script>
