@@ -61,12 +61,12 @@ def upload():
     '''
 
 
-def one_way_anova():
+def one_way_anova(data):
     t, p =  f_oneway(*data.values())
     return p
 
 
-def t_test():
+def t_test(data):
     for list1, list2 in combinations(data.keys(), 2):
         t, p = ttest_ind(data[list1], data[list2])
         print(list1, list2, p)
