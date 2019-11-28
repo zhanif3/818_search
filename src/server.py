@@ -26,9 +26,12 @@ def allowed_file(filename):
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
+        print("Let's do an upload!")
         # check if the post request has the file part
+        print(request.files)
         if 'file' not in request.files:
             flash('No file part')
+            print("We lack a file element")
             return redirect(request.url)
         file = request.files['file']
         # if user does not select file, browser also
@@ -48,7 +51,7 @@ def upload():
 
             # Average, median, STD, MAD
             r.set(filename+"_statistics", df['score'].describe().to_json())
-
+            print("Did everything!")
             return redirect(url_for('upload', filename=filename))
 
     return '''
@@ -150,5 +153,8 @@ def experiments():
 
 
 if __name__ == '__main__':
+    app.secret_key = b'03#y2ualiugheQ0k\n\xec]/'
+    app.config['SESSION_TYPE'] = 'filesystem'
+    app.debug = True
 
     app.run(debug=True, host='0.0.0.0')
