@@ -120,6 +120,11 @@ def compare(experiment_one, experiment_two):
     return ujson.dumps(aggregator)
 
 
+@app.route("/data")
+def data():
+    return jsonify("abc")
+
+
 @app.route('/experiment/<experiment_id>')
 def experiment(experiment_id):
     return r.get(experiment_id+'_statistics').decode('utf-8')

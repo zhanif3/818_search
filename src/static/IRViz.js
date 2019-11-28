@@ -11,10 +11,12 @@ layout = {};
 
 Plotly.newPlot(graphDiv, data, layout);
 
+/*
 $.get("/data", function(data){
 console.log(data)
 myfunction(data);
 })
+
 
 function myfunction(data){
 var xaxis = []
@@ -41,7 +43,9 @@ yaxis: {title : {text: 'Trade in USD'}, range: [0,160000000000]}
 
 Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
 }
+*/
 
+/*
 $(document).ready(function() {
 
 $("select").on('change', function(event){
@@ -65,3 +69,4 @@ console.log(error);
 });
 });
 });
+*/
