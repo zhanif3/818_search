@@ -8,8 +8,25 @@ var graphDiv = document.getElementById('tester'),
 data = [{x: [], y:[]}],
 layout = {};
 
+var egDiv = document.getElementById('topslider');
 
 Plotly.newPlot(graphDiv, data, layout);
+
+
+$.ajax({
+type: "POST",
+url: "upload",
+contentType: "application/json",
+data: JSON.stringify([data]),
+dataType: "json",
+success: function (response) {
+console.log(Date.now());
+console.log(data)
+},
+error: function (error) {
+console.log(error);
+}
+});
 
 /*
 $.get("/data", function(data){

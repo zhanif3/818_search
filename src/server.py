@@ -130,7 +130,7 @@ def experiment(experiment_id):
     return r.get(experiment_id+'_statistics').decode('utf-8')
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def hello():
     return render_template('viz.html')
 
