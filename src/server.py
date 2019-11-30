@@ -1,15 +1,14 @@
 from flask import Flask, flash, request, redirect, url_for
 from flask import render_template, jsonify
 from werkzeug.utils import secure_filename
-import os
+
 import pandas as pd
 import redis
 import io
 import ujson
 import collections
-from itertools import combinations
-from scipy.stats import ttest_ind
-from scipy.stats import f_oneway
+
+import scipy.stats as stats
 import numpy as np
 
 app = Flask(__name__)
@@ -66,22 +65,15 @@ def upload():
     </form>
     '''
 
-
-def one_way_anova():
-    t, p =  f_oneway(*data.values())
-    return p
-
-
-def t_test():
-    for list1, list2 in combinations(data.keys(), 2):
-        t, p = ttest_ind(data[list1], data[list2])
-        print(list1, list2, p)
-
-
 def histogram_intersection(a, b):
     v = np.minimum(a, b).sum().round(decimals=1)
     return v
 
+# We're going to do a paired t-test, as ultimately, we're comparing two population means, using observations from
+# one sample, where we can pair those with observations from ANOTHER sample. This is assumed in the data as provided.
+def paired_ttest(before, after):
+    v = stats.ttest_rel(a=before,b=after)
+    return v
 
 @app.route('/compare/<experiment_one>/<experiment_two>')
 def compare(experiment_one, experiment_two):
@@ -116,13 +108,20 @@ def compare(experiment_one, experiment_two):
     data_corr = merged_data.corr(method=histogram_intersection)
     data_cov = merged_data.cov()
 
-    aggregator = {}
+    aggregator = dict()
     aggregator["merged_stats"] = merged_stats.to_dict()
     aggregator["merged_data"] = merged_data.to_dict()
     aggregator["stats_corr"] = stats_corr.to_dict()
     aggregator["stats_cov"] = stats_cov.to_dict()
     aggregator["data_corr"] = data_corr.to_dict()
     aggregator["data_cov"] = data_cov.to_dict()
+
+    print(merged_data)
+    ttest_result = paired_ttest(merged_data['score'], merged_data['score_q2'])
+    ttest_aggregator = dict()
+    ttest_aggregator['statistic'] = ttest_result.statistic
+    ttest_aggregator['pvalue'] = ttest_result.pvalue
+    aggregator['ttest'] = ttest_aggregator
     return ujson.dumps(aggregator)
 
 
