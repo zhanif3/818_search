@@ -41,9 +41,11 @@ def upload():
             return redirect(request.url)
 
         if file and allowed_file(file.filename):
+            print("this is allowed file")
             filename = secure_filename(file.filename)
             file_contents = file.read()
             data = file_contents.decode("ascii")
+            print(data)
             df = pd.read_csv(io.StringIO(data), delimiter=',', header='infer')
 
             r.sadd("experiments", filename)
@@ -52,24 +54,25 @@ def upload():
             # Average, median, STD, MAD
             r.set(filename+"_statistics", df['score'].describe().to_json())
             print("Did everything!")
+            print(request.url)
             return redirect(url_for('upload', filename=filename))
+            #return redirect("http://localhost:5000/")
 
     return '''
     <h1>Upload new File</h1>
-    <p>Upload new File</p>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
+    <form id="file-upload" method=post enctype=multipart/form-data>
+      <input id="the-file" type=file name=file>
+      <input  type=submit value=submit>
     </form>
     '''
 
 
-def one_way_anova(data):
+def one_way_anova():
     t, p =  f_oneway(*data.values())
     return p
 
 
-def t_test(data):
+def t_test():
     for list1, list2 in combinations(data.keys(), 2):
         t, p = ttest_ind(data[list1], data[list2])
         print(list1, list2, p)
@@ -134,6 +137,7 @@ def experiment(experiment_id):
 
 
 @app.route('/', methods=['GET', 'POST'])
+@app.route('/index')
 def hello():
     return render_template('viz.html')
 

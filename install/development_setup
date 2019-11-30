@@ -5,6 +5,9 @@ sudo apt-get install python3-pip
 sudo apt-get install python3-venv
 sudo apt-get install postgresql-server-dev-10
 
+For mac:
+brew install redis
+
 git clone https://github.com/zhanif3/818_search.git
 
 # First, install the needed python environnment
