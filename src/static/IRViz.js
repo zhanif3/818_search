@@ -1,5 +1,3 @@
-var uploadDiv = document.getElementById('upload');
-
 var graphDiv = document.getElementById('tester'),
 data = [{x: [], y:[]}],
 layout = {};
@@ -15,9 +13,25 @@ experiment2 = data_json.experiments[1];
 console.log(experiment2);
 console.log(experiment1);
 
+var pdiv = document.getElementById('statsig');
+
 $.get("/compare/"+experiment1+"/"+experiment2, function(data) {
 stats_json = JSON.parse(data);
-console.log(stats_json.merged_data.score);
+console.log(stats_json.ttest.pvalue);
+var pvalue = stats_json.ttest.pvalue.toFixed(2);
+var statsigstr = "";
+
+if (pvalue < 0.01){
+statsigstr = "<p style=\"background-color:palegreen; display:inline-flex\"> <b> p="+pvalue+"* <0.01 SIGNIFICANT </b></p>";
+}
+else if (pvalue < 0.05){
+statsigstr = "<p style=\"background-color:palegreen; display:inline-flex\"> <b> p="+pvalue+"* <0.05 SIGNIFICANT </b></p>";
+}
+else{
+statsigstr = "<p style=\"background-color:lightblue; display:inline\"> <b> p="+pvalue+" >0.05 NOT SIGNIFICANT </b></p>";
+}
+
+pdiv.innerHTML = statsigstr;
 var xaxis = [];
 var yaxis = [];
 var xaxis2 = [];
@@ -46,9 +60,18 @@ name: experiment2
 ];
 
 graphDiv.layout = {
- title: 'Scores for '+experiment1+" and "+experiment2,
  yaxis: {title : {text: stats_json.merged_data.metric_type[3]}},
- xaxis: {title : {text: 'Query ID'} }
+ xaxis: {title : {text: 'Query ID'} },
+ showlegend: true,
+ legend: {
+    x: 0,
+    y: 1.1,
+   font: {
+      family: 'sans-serif',
+      size: 14,
+      color: '#000'
+    }},
+ margin: {t: 1}
  }
 Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
  $("select").on('change', function(event){
@@ -70,9 +93,19 @@ Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
  }
 
  graphDiv.layout = {
- title: 'Scores for '+experiment1+" and "+experiment2,
  yaxis: {title : {text: stats_json.merged_data.metric_type[3]}},
  xaxis: {title : {text: 'Query ID'} },
+ showlegend: true,
+  legend: {
+    x: 0,
+    y: 1.1
+  },
+  font: {
+      family: 'sans-serif',
+      size: 14,
+      color: '#000'
+    },
+ margin: {t: 1},
  annotations: [
     {
       x: 5,
@@ -98,11 +131,10 @@ Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
     }
  ],
  shapes: [
+
      {
       type: 'line',
-      x0: 0,
       y0: stats_json.merged_stats[0][stat_value],
-      x1: 10,
       y1: stats_json.merged_stats[0][stat_value],
       line: {
         color: '#1f77b4',
@@ -111,9 +143,7 @@ Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
     },
       {
       type: 'line',
-      x0: 0,
       y0: stats_json.merged_stats[1][stat_value],
-      x1: 10,
       y1: stats_json.merged_stats[1][stat_value],
       line: {
         color: '#ff7f0e',
@@ -126,96 +156,3 @@ Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
 })
 })
 })
-
-
-var egDiv = document.getElementById('topslider');
-
-console.log("did anything happen1??");
-var form_upload = document.getElementById('file-upload');
-$(document).ready(function() {
-$(form_upload).on('submit', function(event){
-var fileInput = document.getElementById('the-file');
-var file = fileInput.files[0];
-var formData = new FormData();
-formData.append('file', file);
-console.log("did anything happen2??");
-$.ajax({
-type: "POST",
-url: "upload",
-data: formData,
-contentType: "application/json",
-async: false,
-cache: false,
-contentType: false,
-enctype: 'multipart/form-data',
-processData: false,
-success: function (response) {
-console.log(Date.now());
-console.log(response);
-},
-error: function (error) {
-console.log(error);
-}
-});
-});
-});
-
-/*
-$.get("/data", function(data){
-console.log(data)
-myfunction(data);
-})
-
-
-function myfunction(data){
-var xaxis = []
-var yaxis = []
-response_json = JSON.parse(data);
-for (i=0; i < response_json.length; i++){
-        xaxis.push(response_json[i].country)
-        yaxis.push(response_json[i].total_usd)
-}
-
-
-graphDiv.data = [
-{
-        x: xaxis,
-        y: yaxis,
-        type: 'bar'
-}
-];
-
-graphDiv.layout = {
-title: 'Total trade (in USD) of edible commodities for top countries',
-yaxis: {title : {text: 'Trade in USD'}, range: [0,160000000000]}
-};
-
-Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
-}
-*/
-
-/*
-$(document).ready(function() {
-
-$("select").on('change', function(event){
-var yearvalue = document.getElementById("year-value").value;
-var dataToBeSent = document.getElementById("mySelect").value;
-
-$.ajax({
-type: "POST",
-url: "send_data",
-contentType: "application/json",
-data: JSON.stringify([dataToBeSent, yearvalue, $top.data("from"), $top.data("to")]),
-dataType: "json",
-success: function (response) {
-console.log(Date.now());
-
-myfunction(response);
-},
-error: function (error) {
-console.log(error);
-}
-});
-});
-});
-*/

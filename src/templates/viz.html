@@ -8,10 +8,12 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
-  <div id="upload"></div>
-  <div class = "ex1">
+  <div id="multiple"></div>
+
+  <div style="margin-left: 500px; margin-top: 10px;">
       <b>Select statistics to display: </b>
-      <select id="mySelect">
+      <select id="mySelect" autofocus>
+        <option>select</option>
         <option>Average</option>
         <option>Median</option>
         <option>SD</option>
@@ -19,10 +21,11 @@
       </select>
   </div>
 
-<div id="tester"></div>
+<div id="statsig" class = "ex1"></div>
 
-<div id="topslider"></div>
+<div id="tester"></div>
 
 <script type="text/javascript" src="{{ url_for('static', filename='IRViz.js') }}"></script>
 
 </html>
+
