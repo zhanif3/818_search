@@ -132,7 +132,13 @@ def data():
 
 @app.route('/experiment/<experiment_id>')
 def experiment(experiment_id):
-    return r.get(experiment_id+'_statistics').decode('utf-8')
+    aggregator = dict()
+    exp_one_data = r.get(experiment_id).decode('ascii')
+    df_data_1 = pd.read_csv(io.StringIO(exp_one_data), delimiter=',', header='infer')
+
+    aggregator["data"] = df_data_1.to_dict()
+    aggregator['stats'] = r.get(experiment_id+'_statistics').decode('utf-8')
+    return ujson.dumps(aggregator)
 
 
 @app.route('/', methods=['GET', 'POST'])
