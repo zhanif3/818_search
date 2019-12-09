@@ -1,3 +1,84 @@
+var multipleDiv = document.getElementById('multiple'),
+data = [{x: [], y:[]}],
+layout = {};
+
+Plotly.newPlot(multipleDiv, data, layout);
+
+$.get("/experiments", function(data){
+var data_json = JSON.parse(data);
+console.log(data_json.experiments.length);
+
+var xaxes = [];
+var yaxes = [];
+var multipleData = [];
+
+var xaxis = [];
+var yaxis = [];
+
+function getData(id) {
+var response = '';
+$.ajax({
+        url: "/experiment/"+data_json.experiments[id],
+        data: { id:id },
+        async: false,
+         success : function(text)
+         {
+             response = text;
+         }
+    })
+    return response;
+}
+console.log(getData(1));
+
+for(var i = 0; i < data_json.experiments.length; i++){
+console.log(data_json.experiments[i]);
+var stats_json = '';
+var experimentID = i;
+
+var data = getData(i);
+stats_json = JSON.parse(data);
+experimentID = i;
+
+console.log(stats_json);
+xaxis = [];
+yaxis = [];
+for(var key in stats_json.data.score){
+    xaxis.push(stats_json.data.query_number[key]);
+    yaxis.push(stats_json.data.score[key]);
+}
+
+xaxes[experimentID] = xaxis;
+yaxes[experimentID] = yaxis;
+
+console.log(i, xaxes);
+multipleData[experimentID] =
+{
+x: xaxes[experimentID],
+y: yaxes[experimentID],
+type: 'line'
+};
+
+multipleDiv.data = multipleData;
+
+multipleDiv.layout = {
+ yaxis: {title : {text: "MAP"}},
+ xaxis: {title : {text: 'Query ID'} },
+ showlegend: true,
+ legend: {
+    x: 0,
+    y: 1.1,
+   font: {
+      family: 'sans-serif',
+      size: 18,
+      color: '#000'
+    }},
+ margin: {t: 1}
+ }
+Plotly.react(multipleDiv, multipleDiv.data, multipleDiv.layout);
+
+}
+})
+
 var graphDiv = document.getElementById('tester'),
 data = [{x: [], y:[]}],
 layout = {};
@@ -41,7 +122,6 @@ for(var key in stats_json.merged_data.score){
     yaxis.push(stats_json.merged_data.score[key]);
     xaxis2.push(stats_json.merged_data.query_number_q2[key]);
     yaxis2.push(stats_json.merged_data.score_q2[key]);
-    console.log(key, stats_json.merged_data.score[key]);
 }
 
 graphDiv.data = [
@@ -68,7 +148,7 @@ graphDiv.layout = {
     y: 1.1,
    font: {
       family: 'sans-serif',
-      size: 14,
+      size: 18,
       color: '#000'
     }},
  margin: {t: 1}
@@ -102,7 +182,7 @@ Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
   },
   font: {
       family: 'sans-serif',
-      size: 14,
+      size: 18,
       color: '#000'
     },
  margin: {t: 1},
