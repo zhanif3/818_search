@@ -1,1 +1,43 @@
 # 818_search
+VIRE: Visual Information Retrieval Evaluation
+
+#Set up instructions:
+ssh -i ~/Downloads/DNS.pem ubuntu@ec2-18-191-73-24.us-east-2.compute.amazonaws.com
+## Install Packages
+sudo apt-get update
+sudo apt-get install python3-pip
+sudo apt-get install python3-venv
+sudo apt-get install postgresql-server-dev-10
+
+For mac:
+brew install redis
+
+git clone https://github.com/zhanif3/818_search.git
+
+## First, install the needed python environnment
+cd 818_search
+python3 -m venv env
+
+## Run the virtual environment
+source env/bin/activate
+
+## Install needed python packages
+(env)$ pip install flask
+(env)$ pip install psycopg2
+
+
+## Set up the database (DO NOT DO THIS ON AWS SERVER)
+sudo -u postgres createuser --interactive
+    818project, y
+sudo -u postgres createdb sammy
+sudo adduser sammy
+sudo -i -u sammy
+psql
+
+# What DB am I connected to?
+\conninfo
+
+#Run instructions
+redis-server
+python server.py
+Visit URL on browser: http://localhost:5000/

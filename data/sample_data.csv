@@ -1,5 +1,5 @@
 query_number,metric_type,score
-1, NDCG, 0.078
+1, MAP, 0.078
 2, MAP, 0.5
 3, MAP, 0.2
 4, MAP, 0.3

@@ -55,7 +55,8 @@ multipleData[experimentID] =
 {
 x: xaxes[experimentID],
 y: yaxes[experimentID],
-type: 'line'
+type: 'line',
+name: data_json.experiments[experimentID]
 };
 
 multipleDiv.data = multipleData;
@@ -79,18 +80,33 @@ Plotly.react(multipleDiv, multipleDiv.data, multipleDiv.layout);
 }
 })
 
+
+var firstDiv = document.getElementById('choose-first');
+var secondDiv = document.getElementById('choose-second');
+
+$.get("/experiments", function(data){
+var experiments_json = JSON.parse(data);
+console.log(experiments_json);
+var options_string = '';
+for(var i = 0; i < experiments_json.experiments.length; i++){
+options_string = options_string+ "<option>"+experiments_json.experiments[i]+"</option>";
+}
+firstDiv.innerHTML = "<b>First experiment: </b> <select id=\"option1\" autofocus> " + options_string + " </select>";
+secondDiv.innerHTML = "<b>Second experiment: </b> <select id=\"option2\" autofocus> " + options_string + " </select>";
+})
+
 var graphDiv = document.getElementById('tester'),
 data = [{x: [], y:[]}],
 layout = {};
 
 Plotly.newPlot(graphDiv, data, layout);
 
-var experiment1 = "";
-var experiment2 = "";
-$.get("/experiments", function(data) {
-data_json = JSON.parse(data);
-experiment1 = data_json.experiments[0];
-experiment2 = data_json.experiments[1];
+$(document).ready(function() {
+$('#target').submit(function(event1){
+event1.preventDefault();
+console.log("reaching here?");
+var experiment1 = document.getElementById("option1").value;
+var experiment2 = document.getElementById("option2").value;
 console.log(experiment2);
 console.log(experiment1);
 
@@ -128,13 +144,13 @@ graphDiv.data = [
 {
 x: xaxis,
 y: yaxis,
-type: 'line',
+type: 'bar',
 name: experiment1
 },
 {
 x:xaxis2,
 y:yaxis2,
-type: 'line',
+type: 'bar',
 name: experiment2
 }
 ];
@@ -214,7 +230,9 @@ Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
 
      {
       type: 'line',
+      x0: 1,
       y0: stats_json.merged_stats[0][stat_value],
+      x1: 10,
       y1: stats_json.merged_stats[0][stat_value],
       line: {
         color: '#1f77b4',
@@ -223,7 +241,9 @@ Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
     },
       {
       type: 'line',
+      x0: 1,
       y0: stats_json.merged_stats[1][stat_value],
+      x1: 10,
       y1: stats_json.merged_stats[1][stat_value],
       line: {
         color: '#ff7f0e',
@@ -233,6 +253,7 @@ Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
  ]
  }
 Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
+})
 })
 })
 })
