@@ -170,7 +170,7 @@ graphDiv.layout = {
  margin: {t: 1}
  }
 Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
- $("select").on('change', function(event){
+ $("#mySelect").on('change', function(event){
  var selected_stat = document.getElementById("mySelect").value;
  if (selected_stat == 'Average'){
  stat_value = 'mean';
@@ -210,9 +210,7 @@ Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
       yref: 'y',
       text: selected_stat+":"+stats_json.merged_stats[0][stat_value],
       showarrow: true,
-      arrowhead: 7,
-      ax: 0,
-      ay: -40
+      arrowhead: 7
     },
       {
       x: 8,
@@ -221,13 +219,10 @@ Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
       yref: 'y',
       text: selected_stat+":"+stats_json.merged_stats[1][stat_value],
       showarrow: true,
-      arrowhead: 7,
-      ax: 0,
-      ay: -40
+      arrowhead: 7
     }
  ],
  shapes: [
-
      {
       type: 'line',
       x0: 1,
@@ -252,6 +247,7 @@ Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
     }
  ]
  }
+console.log(stats_json.merged_stats[0]);
 Plotly.react(graphDiv, graphDiv.data, graphDiv.layout);
 })
 })
