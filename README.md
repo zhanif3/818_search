@@ -4,7 +4,7 @@
 ssh -i ~/Downloads/DNS.pem ubuntu@ec2-18-191-73-24.us-east-2.compute.amazonaws.com
 
 ### Install Packages
-<br>sudo apt-get update
+sudo apt-get update
 <br>sudo apt-get install python3-pip
 <br>sudo apt-get install python3-venv
 <br>sudo apt-get install postgresql-server-dev-10
@@ -24,13 +24,10 @@ source env/bin/activate
 <br>(env)$ pip install psycopg2
 
 ### Set up the database (DO NOT DO THIS ON AWS SERVER)
-<br> sudo -u postgres createuser --interactive
+sudo -u postgres createuser --interactive
 <br>&nbsp&nbsp&nbsp    818project, y
-
 <br> sudo -u postgres createdb sammy
-
 <br> sudo adduser sammy
-
 <br> sudo -i -u sammy
 <br> psql
 
