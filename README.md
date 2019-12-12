@@ -52,4 +52,6 @@ redis-server
 
 python server.py
 
-Visit URL on browser: http://localhost:5000/
+Visit URLs on browser: 
+<br> Upload csv files of the format [query ID],[score_name],[score] here: http://localhost:5000/upload
+<br> For main visualizations: http://localhost:5000/
